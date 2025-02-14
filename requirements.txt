@@ -2,3 +2,5 @@ pdfplumber==0.11.5
 openai
 pypdf2
 reportlab
+bs4
+googlesearch-python

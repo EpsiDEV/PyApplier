@@ -54,7 +54,7 @@ class Emailer:
         return self.__str__()
 
 if __name__ == "__main__":
-    from util.config import Config
+    from config import Config
     config = Config()
     emailer = Emailer(config)
     emailer.send_email(
