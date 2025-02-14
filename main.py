@@ -20,8 +20,6 @@ if not os.path.exists("blacklist.json"):
 else:
     with open("blacklist.json", "r", encoding="utf-8") as f:
         blacklist = json.load(f)
-        
-print(blacklist)
     
 
 if log_to_spreadsheet:
@@ -34,7 +32,7 @@ cfg = Config()
 emailer = Emailer(cfg)
 lm_writer = LMWriter(cfg)
 lm_formatter = LMFormatter(cfg)
-scraper = Scraper(cfg, num_results = 20, max_emails = 1000, use_ai = True)
+scraper = Scraper(cfg, num_results = 1000, max_emails = 1000, use_ai = True)
 sheets = Sheets(cfg)
 
 #----- DATA SCRAPING
@@ -52,6 +50,7 @@ for domain in companies.keys():
 
 print(companies)
 
+
 past_recipients = emailer.fetch_sent_recipients()
 
 if not companies:
@@ -63,17 +62,21 @@ else:
         if recipient_email in past_recipients:
             continue # skip since we already sent
         
+        if recipient_email in blacklist["emails"]:
+            print(f"Skipping {recipient_email} since it is blacklisted...")
+            continue
+        
         if open_before_applying:
             webbrowser.open(f"https://www.{domain_name}")
         
         if ask_before_applying:
-            user_input = input(f"Do you want to send an application to {recipient_email} at {domain_name}? Y/N: ")
+            user_input = input(f"\n\n{company['info']}\nDo you want to send an application to {recipient_email} at {domain_name}? Y/N: ")
 
             if user_input.lower() != 'y':
                 print(f"Skipping email to {recipient_email} at {domain_name} and added to blacklist")
                 blacklist["emails"].append(recipient_email)
                 blacklist["domains"].append(domain_name)
-                with open("blacklist.json", "r", encoding="utf-8"):
+                with open("blacklist.json", "w", encoding="utf-8") as f:
                     json.dump(blacklist, f, indent = 4)
                 continue
         
@@ -81,19 +84,20 @@ else:
         
         lm_text = lm_writer.generate_lm(
             company_info = company['info'], 
-            save_to_file = False)
+            save_to_file = False
+        )
         
         print(f"Generated LM: {lm_text}")
         
-        if ask_before_applying:
-            user_input = input(f"Do you want to send this to {recipient_email} at {domain_name}? Y/N: ")
-            if user_input.lower() != 'y':
-                print(f"Skipping LM email to {recipient_email} at {domain_name} and added to blacklist")
-                blacklist["emails"].append(recipient_email)
-                blacklist["domains"].append(domain_name)
-                with open("blacklist.json", "r", encoding="utf-8"):
-                    json.dump(blacklist, f, indent = 4)
-                continue
+        # if ask_before_applying:
+        #     user_input = input(f"Do you want to send this to {recipient_email} at {domain_name}? Y/N: ")
+        #     if user_input.lower() != 'y':
+        #         print(f"Skipping LM email to {recipient_email} at {domain_name} and added to blacklist")
+        #         blacklist["emails"].append(recipient_email)
+        #         blacklist["domains"].append(domain_name)
+        #         with open("blacklist.json", "w", encoding="utf-8") as f:
+        #             json.dump(blacklist, f, indent = 4)
+        #         continue
             
         lm_formatter.format_to_pdf(
             text = lm_text,

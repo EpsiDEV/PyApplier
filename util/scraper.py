@@ -45,7 +45,7 @@ class Scraper:
                 advanced = True,
                 lang = "fr",
                 region = "fr",
-                unique = True
+                # unique = True # comment if you get http 429 errors
             ):
                 results.append(result)
         except Exception as e:
@@ -72,11 +72,11 @@ class Scraper:
             "sec-fetch-site": "cross-site",
             "sec-fetch-user": "?1",
             "upgrade-insecure-requests": "1",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36 Avast/132.0.0.0"
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36"
         }
         
         try:
-            response = requests.get(url, headers=headers, timeout=1)
+            response = requests.get(url, headers = headers, timeout = 2.5, allow_redirects = True)
             if response.status_code == 200:
                 return response.text
             else:
@@ -171,7 +171,7 @@ class Scraper:
                     response = self.openai.chat.completions.create(
                         model="gpt-3.5-turbo",
                         messages=[
-                            {"role": "system", "content": "Summarize the following text concisely:"},
+                            {"role": "system", "content": "Résume l'entreprise demandée, en mentionnant la ville au début. (ex: Google, une entreprise de Mountain View, est (etc...))"},
                             {"role": "user", "content": text}
                         ],
                         max_tokens=150,

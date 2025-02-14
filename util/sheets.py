@@ -2,6 +2,14 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s] [%(levelname)s] %(message)s',
+    datefmt='%H:%M:%S'
+)
+logger = logging.getLogger(__name__)
+
 class Sheets:
     def __init__(self, config):
         """
@@ -29,16 +37,16 @@ class Sheets:
         
         self.sheet.append_row(row, value_input_option='USER_ENTERED')
         
-        print(f"Logged email for {company_name} to Google Sheet.")
+        logger.info(f"Logged email for {company_name} to Google Sheet.")
 
 
 if __name__ == "__main__":
     from config import Config
     config = Config()
-    logger = Sheets(config)
+    sheets = Sheets(config)
 
     company_name = "Example Company"
     url = "https://example.com"
     email_address = "contact@example.com"
 
-    logger.log_email(company_name, url, email_address)
+    sheets.log_email(company_name, url, email_address)
