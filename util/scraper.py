@@ -44,7 +44,8 @@ class Scraper:
                 num_results = self.num_results,
                 advanced = True,
                 lang = "fr",
-                region = "fr"
+                region = "fr",
+                unique = True
             ):
                 results.append(result)
         except Exception as e:
@@ -71,8 +72,9 @@ class Scraper:
             "sec-fetch-site": "cross-site",
             "sec-fetch-user": "?1",
             "upgrade-insecure-requests": "1",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36"
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36 Avast/132.0.0.0"
         }
+        
         try:
             response = requests.get(url, headers=headers, timeout=1)
             if response.status_code == 200:

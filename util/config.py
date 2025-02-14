@@ -27,6 +27,3 @@ class Config:
     
 if __name__ == "__main__":
     config = Config()
-    print(config.get('hydroxide_path'))
-    print(config.get('proton_username'))
-    print(config.get('bridge_password'))

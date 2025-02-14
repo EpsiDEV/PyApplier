@@ -34,10 +34,9 @@ cfg = Config()
 emailer = Emailer(cfg)
 lm_writer = LMWriter(cfg)
 lm_formatter = LMFormatter(cfg)
-scraper = Scraper(cfg, num_results = 1500, max_emails = 1500, use_ai = True)
+scraper = Scraper(cfg, num_results = 20, max_emails = 1000, use_ai = True)
 sheets = Sheets(cfg)
 
-input()
 #----- DATA SCRAPING
 companies = {}
 emails = scraper.run()
