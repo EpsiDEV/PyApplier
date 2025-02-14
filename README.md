@@ -1,4 +1,4 @@
-# PyApplier
+# PyApplier (W.I.P.)
 
 This Python-based system automates the process of finding job opportunities, generating cover letters, and sending applications via email. It integrates web scraping, AI-powered text generation, and email automation to streamline the job application process.
 
