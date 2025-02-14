@@ -6,15 +6,23 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph
 
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s] [%(levelname)s] %(message)s',
+    datefmt='%H:%M:%S'
+)
+logger = logging.getLogger(__name__)
+
 class LMFormatter:
-    def __init__(self, template_path: str):
+    def __init__(self, config):
         """
         Initializes the LMFormatter with a template PDF file.
         
         Args:
             template_path (str): Path to the template PDF file.
         """
-        self.template_path = template_path
+        self.template_path = config.get('lm_template_path', 'pdf')
 
     def format_to_pdf(self, text: str, output_path: str = "output.pdf"):
         """
@@ -24,7 +32,7 @@ class LMFormatter:
             text (str): The text to be inserted into the PDF. It can contain newlines (\n).
             output_path (str): The path where the formatted PDF will be saved.
         """
-        print(f"Formatting text to PDF")
+        logger.info(f"Formatting PDF to {output_path}")
         
         # Read the template PDF
         reader = PdfReader(self.template_path)
@@ -73,13 +81,13 @@ class LMFormatter:
         with open(output_path, "wb") as output_pdf:
             writer.write(output_pdf)
             
-        print(f"PDF formatted successfully to {output_path}")
+        logger.info(f"PDF formatted successfully to {output_path}")
 
 if __name__ == "__main__":
     from lmwriter import LMWriter
     from config import Config
     config = Config()
-    formatter = LMFormatter(config.get('lm_template_path', 'pdf'))
+    formatter = LMFormatter(config)
     writer = LMWriter(config)
     text = writer.generate_lm("Google", save_to_file = False)
     formatter.format_to_pdf(text, config.get('lm_output_path', 'pdf'))

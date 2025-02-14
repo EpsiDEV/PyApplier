@@ -1,5 +1,13 @@
 from openai import OpenAI
 
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s] [%(levelname)s] %(message)s',
+    datefmt='%H:%M:%S'
+)
+logger = logging.getLogger(__name__)
+
 class LMWriter:
     def __init__(self, config):
         """
@@ -17,7 +25,8 @@ class LMWriter:
             job_info (str): _description_
             user_info (str): _description_
         """
-            
+        logger.info(f"Generating cover letter for {company_info}")
+        
         if user_info is None:
             user_info = self.config.get("body", "email").replace("\\n", "\n")
         
@@ -45,9 +54,12 @@ class LMWriter:
             stream = False
         )
         
+        logger.info(f"Generated cover letter for {company_info}")
+        
         output = first_part + "\n\n" + response.choices[0].message.content.strip()
         
         if save_to_file:
+            logger.info(f"Saving cover letter for {company_info} to file LM.txt")
             with open("LM.txt", "w", encoding="utf-8") as f:
                 f.write(output)
         

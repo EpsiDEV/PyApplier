@@ -1,6 +1,8 @@
-pdfplumber==0.11.5
+pdfplumber
 openai
 pypdf2
 reportlab
 bs4
 googlesearch-python
+gspread
+oauth2client

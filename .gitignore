@@ -174,3 +174,6 @@ cython_debug/
 
 config.ini
 *.pdf
+*.exe
+*.json
+credentials/
