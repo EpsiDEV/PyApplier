@@ -91,11 +91,9 @@ class Emailer:
         
         
 if __name__ == "__main__":
-    
-    
     from config import Config
     config = Config()
-    print(config.get('lm_output_path', 'pdf'))
+    logging.debug(config.get('lm_output_path', 'pdf'))
     
     emailer = Emailer(config)
     emailer.send_email(

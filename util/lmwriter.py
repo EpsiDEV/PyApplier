@@ -15,7 +15,7 @@ class LMWriter:
         """
         self.config = config
         self.client: OpenAI = OpenAI(base_url = config.get('openai_base_url', 'openai'), api_key = config.get('openai_api_key', 'openai'))
-        self.models = ["MIXTRAL-8X22B-INSTRUCT"] 
+        self.models = ["CHATGPT-4O-LATEST"] 
         
     def generate_lm(self, company_info: str, user_info: str = None, first_part: str = None, save_to_file: bool = True):
         """

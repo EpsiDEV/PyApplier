@@ -50,7 +50,6 @@ for domain in companies.keys():
 
 print(companies)
 
-
 past_recipients = emailer.fetch_sent_recipients()
 
 if not companies:
@@ -59,13 +58,9 @@ else:
     for domain_name, company in companies.items():
         
         recipient_email = company['emails'][0]
-        if recipient_email in past_recipients:
+        if recipient_email in past_recipients or recipient_email in blacklist["emails"]:
             continue # skip since we already sent
-        
-        if recipient_email in blacklist["emails"]:
-            print(f"Skipping {recipient_email} since it is blacklisted...")
-            continue
-        
+
         if open_before_applying:
             webbrowser.open(f"https://www.{domain_name}")
         
