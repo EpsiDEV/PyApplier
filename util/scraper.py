@@ -101,6 +101,13 @@ class Scraper:
             local_part, domain = email.split('@', 1)
             if local_part.islower() and local_part.replace('.', '').replace('_', '').isalnum():
                 valid_emails.add(email)
+                
+            if local_part[0].isdigit():
+                local_part = re.sub(r'^\d+', '', local_part)
+                email = f"{local_part}@{domain}"
+                if local_part.islower() and local_part.replace('.', '').replace('_', '').isalnum():
+                    valid_emails.add(email)
+                    
         logger.debug(f"Extracted {len(valid_emails)} valid emails from text")
         return valid_emails
 
